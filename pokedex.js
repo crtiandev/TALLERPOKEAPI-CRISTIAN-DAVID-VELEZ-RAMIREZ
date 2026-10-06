@@ -1,4 +1,4 @@
-const { compararPokemon, buscarPokemon, mostrarFicha } = require('./explorar.js');
+const { compararPokemon, buscarPokemon, mostrarFicha, pokemonMasFuerte} = require('./explorar.js');
 
 async function probarPokedex() {
   console.log("Buscando Pokémon 1");
@@ -37,7 +37,6 @@ probarEjercicio3()
 
 
 
-
 async function comparacion() {
   console.log("=== Snorlax vs Machamp ===");
   // Justificación: Comparamos HP porque Snorlax tiene mas cantidad de puntos de vida.
@@ -51,3 +50,23 @@ async function comparacion() {
 }
 
  comparacion();
+
+
+async function luchapokemon() {
+ 
+  const miEquipo = ["pikachu", "charizard", "gengar", "mewtwo", "snorlax", "machamp"];
+
+  console.log("=== EJERCICIO 5: DESAFÍO FINAL ===");
+
+  const ganadorAtaque = await pokemonMasFuerte(miEquipo, "attack");
+  console.log(`El pokémon con mayor ataque es: ${ganadorAtaque}`);
+
+  const ganadorDefensa = await pokemonMasFuerte(miEquipo, "defense");
+  console.log(`El pokémon con mayor defensa es: ${ganadorDefensa}`);
+
+  console.log("\nFicha completa del ganador de ataque:");
+  const datosGanadorAtaque = await buscarPokemon(ganadorAtaque);
+  mostrarFicha(datosGanadorAtaque);
+}
+
+luchapokemon();
