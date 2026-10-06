@@ -1,3 +1,6 @@
+module.exports = { buscarPokemon, mostrarFicha, compararPokemon, obtenerStat, pokemonMasFuerte};
+
+
 async function explorarPokemon (){
     const respuesta = await 
     fetch("https://pokeapi.co/api/v2/pokemon/pikachu")
@@ -40,7 +43,6 @@ async function buscarPokemon(nombre) {
   return await respuesta.json();
 }
 
-module.exports = { buscarPokemon };
 
 explorarPokemon();
 
@@ -75,5 +77,84 @@ function mostrarFicha(datos) {
   console.log("////////////////////////////////////");
 }
 
-module.exports = { buscarPokemon, mostrarFicha };
 
+
+function	obtenerStat(datos,	nombreStat)	{
+  for (let i = 0 ; i < datos.stats.length; i++){
+    if(datos.stats[i].stat.name === nombreStat.toLowerCase()){
+      return datos.stats[i].base_stat;
+    }
+  }
+  return null;
+}
+
+async function compararPokemon (nombre1, nombre2, stat){
+  const poke1 = await buscarPokemon(nombre1);
+  const poke2 = await buscarPokemon(nombre2);
+  if (poke1 === null || poke2 === null ){
+    console.log("no se puede comparar");
+    return;
+  }
+ const statpoke1 = obtenerStat(poke1, stat);
+ const statpoke2 = obtenerStat(poke2, stat);
+
+ if (statpoke1===null || statpoke2 === null){
+  console.log("no existe");
+  console.log("estadisticas validas: hp, attack, defense, special-attack, special-defense, speed");
+  return;
+ }
+
+ if (statpoke1 > statpoke2){
+  console.log(`ganador en ${stat}: ${poke1.name.toLowerCase()}`);
+ }
+ else if (statpoke1 < statpoke2){
+  console.log(`ganador en ${stat}: ${poke2.name.toLowerCase()}`);
+ }
+ else {
+  console.log("es un empate");
+ }
+
+}
+
+
+ async function pokemonMasFuerte(listaNombres, stat) {
+  let mejorNombre = "";
+  let mejorValor = -1;
+
+  for (const nombre of listaNombres) {
+    const pokemon = await buscarPokemon(nombre);
+
+    if (!pokemon) continue;
+
+    const valorStat = obtenerStat(pokemon, stat);
+
+    if (valorStat === null) continue;
+
+    if (valorStat > mejorValor) {
+      mejorValor = valorStat;
+      mejorNombre = pokemon.name;
+  }
+
+  return mejorNombre;
+}
+}
+
+
+async function ejercicio5() {
+ 
+  const miEquipo = ["pikachu", "charizard", "gengar", "mewtwo", "snorlax", "machamp"];
+
+  console.log("=== EJERCICIO 5: DESAFÍO FINAL ===");
+
+  const ganadorAtaque = await pokemonMasFuerte(miEquipo, "attack");
+  console.log(`El pokémon con mayor ataque es: ${ganadorAtaque}`);
+
+  const ganadorDefensa = await pokemonMasFuerte(miEquipo, "defense");
+  console.log(`El pokémon con mayor defensa es: ${ganadorDefensa}`);
+
+  console.log("\nFicha completa del ganador de ataque:");
+  const datosGanadorAtaque = await buscarPokemon(ganadorAtaque);
+  mostrarFicha(datosGanadorAtaque);
+}
+
+ejercicio5();

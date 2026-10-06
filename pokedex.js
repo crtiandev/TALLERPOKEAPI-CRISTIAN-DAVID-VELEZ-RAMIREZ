@@ -1,4 +1,4 @@
-const { buscarPokemon } = require('./explorar.js');
+const { compararPokemon, buscarPokemon, mostrarFicha } = require('./explorar.js');
 
 async function probarPokedex() {
   console.log("Buscando Pokémon 1");
@@ -24,7 +24,6 @@ async function probarPokedex() {
 
 probarPokedex();
 
-const { buscarPokemon, mostrarFicha } = require('./explorar.js');
 
 async function probarEjercicio3() {
   const pokemon1 = await buscarPokemon("gengar");
@@ -35,3 +34,20 @@ async function probarEjercicio3() {
 }
 
 probarEjercicio3()
+
+
+
+
+async function comparacion() {
+  console.log("=== Snorlax vs Machamp ===");
+  // Justificación: Comparamos HP porque Snorlax tiene mas cantidad de puntos de vida.
+  await compararPokemon('snorlax', 'machamp', 'hp');
+
+  console.log("\n=== Comparación en Defensa ===");
+  await compararPokemon('blastoise', 'charizard', 'defense');
+
+  console.log("\n=== Stat Inexistente ===");
+  await compararPokemon('pikachu', 'eevee', 'fuerza');
+}
+
+ comparacion();
